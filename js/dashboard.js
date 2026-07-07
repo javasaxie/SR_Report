@@ -1,56 +1,100 @@
-<div class="dashboard">
+<script>
 
-  <h2>Dashboard</h2>
+let chartInstance = null;
 
-  <div class="row g-4 mt-2">
+function loadDashboard(){
 
-    <div class="col-md-3">
-      <div class="card-ios">
-        <div>
-          <h4>Total Pembelian</h4>
-          <h2 id="totalPurchase">0</h2>
-        </div>
-        <div class="icon">📊</div>
-      </div>
-    </div>
+  google.script.run
 
-    <div class="col-md-3">
-      <div class="card-ios">
-        <div>
-          <h4>Total Dana</h4>
-          <h2 id="totalDana">0</h2>
-        </div>
-        <div class="icon">💰</div>
-      </div>
-    </div>
+  .withSuccessHandler(function(data){
 
-    <div class="col-md-3">
-      <div class="card-ios">
-        <div>
-          <h4>Saldo</h4>
-          <h2 id="balance">0</h2>
-        </div>
-        <div class="icon">💵</div>
-      </div>
-    </div>
+    document.getElementById("totalPurchase").innerHTML = formatMoney(data.totalPurchase);
+    document.getElementById("totalDana").innerHTML = formatMoney(data.totalDana);
+    document.getElementById("balance").innerHTML = formatMoney(data.balance);
+    document.getElementById("purchaseCount").innerHTML = data.purchaseCount;
 
-    <div class="col-md-3">
-      <div class="card-ios">
-        <div>
-          <h4>Jumlah Item</h4>
-          <h2 id="purchaseCount">0</h2>
-        </div>
-        <div class="icon">📦</div>
-      </div>
-    </div>
+    renderChart();
 
-  </div>
+  })
 
-  <div class="glass mt-4">
-    <h4>Grafik Pembelian</h4>
-    <canvas id="purchaseChart"></canvas>
-  </div>
+  .getDashboard();
 
-</div>
+}
 
-<?!= include('js/dashboard'); ?>
+function renderChart(){
+
+  google.script.run
+
+  .withSuccessHandler(function(data){
+
+    let itemNames = [];
+    let itemTotals = [];
+
+    data.forEach(x => {
+      itemNames.push(x.item);
+      itemTotals.push(x.total);
+    });
+
+    const ctx = document.getElementById("purchaseChart").getContext("2d");
+
+    if(chartInstance){
+      chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: itemNames,
+        datasets: [{
+          label: "Total Pembelian",
+          data: itemTotals,
+          backgroundColor: [
+            "rgba(54, 162, 235, 0.5)",
+            "rgba(75, 192, 192, 0.5)",
+            "rgba(255, 206, 86, 0.5)",
+            "rgba(153, 102, 255, 0.5)",
+            "rgba(255, 159, 64, 0.5)"
+          ],
+          borderColor: [
+            "rgb(54, 162, 235)",
+            "rgb(75, 192, 192)",
+            "rgb(255, 206, 86)",
+            "rgb(153, 102, 255)",
+            "rgb(255, 159, 64)"
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "top"
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+  })
+
+  .getPurchasing();
+
+}
+
+function formatMoney(v){
+
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR"
+  }).format(v);
+
+}
+
+loadDashboard();
+
+</script>
