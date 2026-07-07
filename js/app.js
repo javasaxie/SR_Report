@@ -1,43 +1,30 @@
 <script>
 
-
 function loadPage(page){
 
+  google.script.run
 
+  .withSuccessHandler(function(html){
 
-google.script.run
+    document.getElementById("page").innerHTML = html;
 
-.withSuccessHandler(function(html){
+    // Trigger load function setelah page dimuat
+    setTimeout(() => {
+      let loadFunc = window['load' + page.charAt(0).toUpperCase() + page.slice(1)];
+      if(typeof loadFunc === 'function'){
+        loadFunc();
+      }
+    }, 100);
 
+  })
 
-document
-.getElementById("page")
-.innerHTML=html;
-
-
-
-})
-
-.include(page);
-
-
-
-}
-
-
-
-
-// default page
-
-
-window.onload=function(){
-
-
-loadPage("dashboard");
-
+  .include(page + '.html');
 
 }
 
-
+// Default page
+window.onload = function(){
+  loadPage("dashboard");
+}
 
 </script>
