@@ -1,0 +1,166 @@
+<div class="dashboard">
+
+
+<div class="d-flex justify-content-between">
+
+
+<h2>
+Dana Masuk
+</h2>
+
+
+<button 
+class="btn btn-primary rounded-pill"
+onclick="openDana()">
+
+<i class="bi bi-plus-circle"></i>
+Tambah
+
+</button>
+
+
+</div>
+
+
+
+
+
+<div class="glass mt-4">
+
+
+<table class="table">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+<th>Sumber</th>
+<th>Tujuan</th>
+<th>Nominal</th>
+<th>Via</th>
+<th></th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="danaTable">
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+<div class="modal fade" id="danaModal">
+
+
+<div class="modal-dialog modal-dialog-centered">
+
+
+<div class="modal-content rounded-5">
+
+
+<div class="modal-header">
+
+<h5>
+Dana Masuk
+</h5>
+
+
+<button class="btn-close"
+data-bs-dismiss="modal">
+
+</button>
+
+
+</div>
+
+
+
+<div class="modal-body">
+
+
+<input
+class="form-control mb-2"
+type="date"
+id="d_date">
+
+
+<input
+class="form-control mb-2"
+id="d_sumber"
+placeholder="Sumber">
+
+
+<input
+class="form-control mb-2"
+id="d_tujuan"
+placeholder="Tujuan">
+
+
+<input
+class="form-control mb-2"
+type="number"
+id="d_nominal"
+placeholder="Nominal">
+
+
+<select
+class="form-control"
+id="d_via">
+
+
+<option>
+Transfer
+</option>
+
+<option>
+Cash
+</option>
+
+</select>
+
+
+
+</div>
+
+
+
+
+<div class="modal-footer">
+
+<button
+class="btn btn-primary w-100 rounded-pill"
+onclick="saveDana()">
+
+SAVE
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<?!= include('js/dana'); ?>
