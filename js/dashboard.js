@@ -9,8 +9,11 @@ function loadDashboard(){
   .withSuccessHandler(function(data){
 
     document.getElementById("totalPurchase").innerHTML = formatMoney(data.totalPurchase);
+
     document.getElementById("totalDana").innerHTML = formatMoney(data.totalDana);
+
     document.getElementById("balance").innerHTML = formatMoney(data.balance);
+
     document.getElementById("purchaseCount").innerHTML = data.purchaseCount;
 
     renderChart();
@@ -28,6 +31,7 @@ function renderChart(){
   .withSuccessHandler(function(data){
 
     let itemNames = [];
+
     let itemTotals = [];
 
     data.forEach(x => {
