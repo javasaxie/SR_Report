@@ -1,294 +1,107 @@
 <script>
 
-
 let reportData=[];
-
-
 
 function loadReport(){
 
+  let start = r_start.value;
+  let end = r_end.value;
 
-let start =
-r_start.value;
+  if(!start || !end){
+    Swal.fire("Warning", "Pilih periode", "warning");
+    return;
+  }
 
+  google.script.run
 
-let end =
-r_end.value;
+  .withSuccessHandler(function(data){
 
+    reportData=data;
+    renderReport(data);
 
+  })
 
-if(!start || !end){
-
-
-Swal.fire(
-"Warning",
-"Pilih periode",
-"warning"
-);
-
-
-return;
-
+  .getReport(start,end);
 
 }
-
-
-
-
-google.script.run
-
-.withSuccessHandler(function(data){
-
-
-reportData=data;
-
-
-renderReport(data);
-
-
-
-})
-
-.getReport(start,end);
-
-
-
-}
-
-
-
-
-
-
 
 function renderReport(data){
 
-
-
-let total=0;
-
-
-let html=`
-
-
-<table class="table">
-
-
-<tr>
-
-<th>
-Date
-</th>
-
-<th>
-Item
-</th>
-
-<th>
-Vendor
-</th>
-
-<th>
-Qty
-</th>
-
-<th>
-Total
-</th>
-
-
-</tr>
-
-
-`;
-
-
-
-
-data.forEach(x=>{
-
-
-total+=Number(x.total);
-
-
-
-html+=`
-
-<tr>
-
-<td>
-${x.date}
-</td>
-
-
-<td>
-${x.item}
-</td>
-
-
-<td>
-${x.vendor}
-</td>
-
-
-<td>
-${x.qty}
-</td>
-
-
-<td>
-${formatMoney(x.total)}
-</td>
-
-
-</tr>
-
-
-`;
-
-
-
-});
-
-
-
-
-html+=`
-
-<tr>
-
-
-<th colspan="4">
-
-TOTAL
-
-
-</th>
-
-
-<th>
-
-${formatMoney(total)}
-
-</th>
-
-
-</tr>
-
-
-</table>
-
-
-`;
-
-
-
-reportArea.innerHTML=html;
-
-
+  let total=0;
+  let html=`
+  <table class="table">
+  <tr>
+  <th>Date</th>
+  <th>Item</th>
+  <th>Vendor</th>
+  <th>Qty</th>
+  <th>Total</th>
+  </tr>
+  `;
+
+  data.forEach(x=>{
+
+    total+=Number(x.total);
+    html+=`
+    <tr>
+    <td>${x.date}</td>
+    <td>${x.item}</td>
+    <td>${x.vendor}</td>
+    <td>${x.qty}</td>
+    <td>${formatMoney(x.total)}</td>
+    </tr>
+    `;
+
+  });
+
+  html+=`
+  <tr>
+  <th colspan="4">TOTAL</th>
+  <th>${formatMoney(total)}</th>
+  </tr>
+  </table>
+  `;
+
+  reportArea.innerHTML=html;
 
 }
-
-
-
-
-
-
-
-// ===============================
-// EXPORT PDF
-// ===============================
-
 
 function exportPDF(){
 
+  if(reportData.length==0){
+    Swal.fire("Data kosong", "", "warning");
+    return;
+  }
 
+  google.script.run
 
-if(reportData.length==0){
+  .withSuccessHandler(function(url){
+    window.open(url);
+  })
 
-Swal.fire(
-"Data kosong",
-"",
-"warning"
-);
-
-return;
-
-}
-
-
-
-
-google.script.run
-
-.withSuccessHandler(function(url){
-
-
-window.open(url);
-
-
-
-})
-
-.createPDF(reportData);
-
-
+  .createPDF(reportData);
 
 }
-
-
-
-
-
-
-
-
-// ===============================
-// EXPORT EXCEL
-// ===============================
-
 
 function exportExcel(){
 
+  google.script.run
 
+  .withSuccessHandler(function(url){
+    window.open(url);
+  })
 
-google.script.run
-
-.withSuccessHandler(function(url){
-
-
-window.open(url);
-
-
-})
-
-
-.createExcel(reportData);
-
-
+  .createExcel(reportData);
 
 }
-
-
-
-
 
 function formatMoney(v){
 
-
-return new Intl.NumberFormat(
-"id-ID",
-{
-style:"currency",
-currency:"IDR"
-}
-)
-.format(v);
-
-
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR"
+  }).format(v);
 
 }
-
-
 
 </script>
