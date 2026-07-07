@@ -11,32 +11,17 @@ function loadDana(){
 
 function loadDanaTable(){
 
-  google.script.run
+  google.script.run.withSuccessHandler(function(data){
 
-  .withSuccessHandler(function(data){
-
-    let html="";
+    let html = "";
 
     data.forEach(x=>{
-
-      html+=`
-      <tr>
-      <td>${x.date}</td>
-      <td>${x.sumber}</td>
-      <td>${x.tujuan}</td>
-      <td>${formatMoney(x.nominal)}</td>
-      <td>${x.via}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="deleteDana('${x.id}')"><i class="bi bi-trash"></i></button></td>
-      </tr>
-      `;
-
+      html += `<tr><td>${x.date}</td><td>${x.sumber}</td><td>${x.tujuan}</td><td>${formatMoney(x.nominal)}</td><td>${x.via}</td><td><button class="btn btn-danger btn-sm" onclick="deleteDana('${x.id}')"><i class="bi bi-trash"></i></button></td></tr>`;
     });
 
-    danaTable.innerHTML=html;
+    danaTable.innerHTML = html;
 
-  })
-
-  .getDana();
+  }).getDana();
 
 }
 
@@ -48,7 +33,7 @@ function openDana(){
 
 function saveDana(){
 
-  let data={
+  let data = {
     date: d_date.value,
     sumber: d_sumber.value,
     tujuan: d_tujuan.value,
@@ -56,29 +41,21 @@ function saveDana(){
     via: d_via.value
   };
 
-  google.script.run
-
-  .withSuccessHandler(()=>{
+  google.script.run.withSuccessHandler(()=>{
 
     Swal.fire("Success", "Dana masuk tersimpan", "success");
     danaModal.hide();
     loadDanaTable();
 
-  })
-
-  .saveDana(data);
+  }).saveDana(data);
 
 }
 
 function deleteDana(id){
 
-  google.script.run
-
-  .withSuccessHandler(()=>{
+  google.script.run.withSuccessHandler(()=>{
     loadDanaTable();
-  })
-
-  .deleteDana(id);
+  }).deleteDana(id);
 
 }
 
