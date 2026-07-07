@@ -1,245 +1,174 @@
 <script>
 
-
 function showMaster(type){
 
+  if(type=="item")
 
-if(type=="item")
+    loadItem();
 
-loadItem();
+  if(type=="vendor")
 
+    loadVendor();
 
-if(type=="vendor")
+  if(type=="merk")
 
-loadVendor();
-
-
-if(type=="merk")
-
-loadMerk();
-
-
+    loadMerk();
 
 }
-
-
 
 // ================= ITEM =================
 
-
 function loadItem(){
 
+  google.script.run
 
-google.script.run
+  .withSuccessHandler(data=>{
 
-.withSuccessHandler(data=>{
+    let html=`
 
+    <h4>
+    Master Item
+    </h4>
 
-let html=`
+    <table class="table">
 
-<h4>
-Master Item
-</h4>
+    <tr>
 
+    <th>Item</th>
+    <th>Part</th>
+    <th>Persamaan1</th>
+    <th>Persamaan2</th>
 
-<table class="table">
+    </tr>
 
-<tr>
+    `;
 
-<th>Item</th>
-<th>Part</th>
-<th>Persamaan1</th>
-<th>Persamaan2</th>
+    data.forEach(x=>{
 
-</tr>
+      html+=`
 
-`;
+      <tr>
 
+      <td>${x.item}</td>
 
+      <td>${x.part}</td>
 
-data.forEach(x=>{
+      <td>${x.persamaan1}</td>
 
+      <td>${x.persamaan2}</td>
 
-html+=`
+      </tr>
 
-<tr>
+      `;
 
-<td>${x.item}</td>
+    });
 
-<td>${x.part}</td>
+    html+="</table>";
 
-<td>${x.persamaan1}</td>
+    masterContent.innerHTML=html;
 
-<td>${x.persamaan2}</td>
+  })
 
-</tr>
-
-
-`;
-
-
-
-});
-
-
-
-html+="</table>";
-
-
-
-masterContent.innerHTML=html;
-
-
-
-})
-
-.getMasterItem();
-
-
+  .getMasterItem();
 
 }
-
-
-
-
 
 // ================= VENDOR =================
 
-
-
 function loadVendor(){
 
+  google.script.run
 
+  .withSuccessHandler(data=>{
 
-google.script.run
+    let html=`
 
-.withSuccessHandler(data=>{
+    <h4>
+    Master Vendor
+    </h4>
 
+    <table class="table">
 
-let html=`
+    <tr>
 
-<h4>
-Master Vendor
-</h4>
+    <th>Nama</th>
+    <th>Telp</th>
+    <th>Alamat</th>
 
+    </tr>
 
-<table class="table">
+    `;
 
-<tr>
+    data.forEach(x=>{
 
-<th>Nama</th>
-<th>Telp</th>
-<th>Alamat</th>
+      html+=`
 
+      <tr>
 
-</tr>
+      <td>${x.nama}</td>
 
-`;
+      <td>${x.telp}</td>
 
+      <td>${x.alamat}</td>
 
+      </tr>
 
-data.forEach(x=>{
+      `;
 
+    });
 
-html+=`
+    html+="</table>";
 
-<tr>
+    masterContent.innerHTML=html;
 
-<td>${x.nama}</td>
+  })
 
-<td>${x.telp}</td>
-
-<td>${x.alamat}</td>
-
-</tr>
-
-
-`;
-
-
-
-});
-
-
-
-html+="</table>";
-
-masterContent.innerHTML=html;
-
-
-
-})
-
-
-.getVendor();
-
+  .getVendor();
 
 }
-
-
-
-
-
-
 
 // ================= MERK =================
 
-
-
 function loadMerk(){
 
+  google.script.run
 
-google.script.run
+  .withSuccessHandler(data=>{
 
-.withSuccessHandler(data=>{
+    let html=`
 
+    <h4>
+    Master Merk
+    </h4>
 
-let html=`
+    <ul>
 
-<h4>
-Master Merk
-</h4>
+    `;
 
+    data.forEach(x=>{
 
-<ul>
+      html+=`
 
-`;
+      <li>
+      ${x}
+      </li>
 
+      `;
 
-data.forEach(x=>{
+    });
 
+    html+=`
 
-html+=`
+    </ul>
 
-<li>
-${x}
-</li>
+    `;
 
-`;
+    masterContent.innerHTML=html;
 
+  })
 
-});
-
-
-html+=`
-
-</ul>
-
-`;
-
-
-masterContent.innerHTML=html;
-
-
-})
-
-.getMerk();
-
-
+  .getMerk();
 
 }
-
-
-
 
 </script>
