@@ -1,163 +1,56 @@
-<script>
-
-
-
-function loadDashboard(){
-
-
-
-google.script.run
-
-.withSuccessHandler(function(data){
-
-
-
-document
-.getElementById("totalPurchase")
-.innerHTML=
-
-formatMoney(data.totalPurchase);
-
-
-
-
-
-document
-.getElementById("totalDana")
-.innerHTML=
-
-formatMoney(data.totalDana);
-
-
-
-
-
-document
-.getElementById("balance")
-.innerHTML=
-
-formatMoney(data.balance);
-
-
-
-
-createChart();
-
-
-
-})
-
-
-.getDashboard();
-
-
-
-}
-
-
-
-
-
-
-
-function formatMoney(value){
-
-
-return new Intl.NumberFormat(
-"id-ID",
-{
-
-style:"currency",
-
-currency:"IDR"
-
-}
-
-)
-.format(value);
-
-
-
-}
-
-
-
-
-
-
-function createChart(){
-
-
-
-let ctx =
-document
-.getElementById(
-"purchaseChart"
-);
-
-
-
-new Chart(ctx,{
-
-
-type:"bar",
-
-
-data:{
-
-
-labels:[
-
-"Jan",
-"Feb",
-"Mar",
-"Apr",
-"May"
-
-],
-
-
-
-datasets:[{
-
-
-label:
-"Purchasing",
-
-
-data:[
-120,
-200,
-150,
-300,
-250
-]
-
-
-
-}]
-
-
-},
-
-
-
-options:{
-
-
-responsive:true
-
-
-
-}
-
-
-});
-
-
-
-}
-
-
-
-</script>
+<div class="dashboard">
+
+  <h2>Dashboard</h2>
+
+  <div class="row g-4 mt-2">
+
+    <div class="col-md-3">
+      <div class="card-ios">
+        <div>
+          <h4>Total Pembelian</h4>
+          <h2 id="totalPurchase">0</h2>
+        </div>
+        <div class="icon">📊</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card-ios">
+        <div>
+          <h4>Total Dana</h4>
+          <h2 id="totalDana">0</h2>
+        </div>
+        <div class="icon">💰</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card-ios">
+        <div>
+          <h4>Saldo</h4>
+          <h2 id="balance">0</h2>
+        </div>
+        <div class="icon">💵</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card-ios">
+        <div>
+          <h4>Jumlah Item</h4>
+          <h2 id="purchaseCount">0</h2>
+        </div>
+        <div class="icon">📦</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="glass mt-4">
+    <h4>Grafik Pembelian</h4>
+    <canvas id="purchaseChart"></canvas>
+  </div>
+
+</div>
+
+<?!= include('js/dashboard'); ?>
