@@ -44,6 +44,147 @@ window.callAPI = async function(action, data = null) {
 };
 
 // ==========================================
+// LOGIKA HALAMAN PURCHASING
+// ==========================================
+
+// 1. Fungsi Utama saat Halaman Purchasing Dibuka
+window.initPurchasing = async function() {
+  let tbody = document.getElementById('purchaseTable');
+  
+  if(tbody) {
+    tbody.innerHTML = `<tr><td colspan="8" class="text-center p-3"><div class="spinner-border text-primary"></div><br>Mengambil data...</td></tr>`;
+  }
+  
+  // Ambil data dari API Apps Script
+  let response = await callAPI('getPurchasing');
+  
+  if (response && tbody) {
+    tbody.innerHTML = '';
+    
+    if(response.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center">Belum ada data</td></tr>`;
+      return;
+    }
+
+    // Render tabel
+    response.forEach(item => {
+      let tgl = new Date(item.date).toLocaleDateString('id-ID');
+      let totalRp = Number(item.total).toLocaleString('id-ID');
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${tgl}</td>
+          <td>${item.item}</td>
+          <td>${item.part}</td>
+          <td>${item.merk || '-'}</td>
+          <td>${item.vendor || '-'}</td>
+          <td>${item.qty}</td>
+          <td>Rp ${totalRp}</td>
+          <td>
+            <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+          </td>
+        </tr>
+      `;
+    });
+  }
+};
+
+// 2. Membuka Modal Input Data
+window.openPurchaseModal = function() {
+  // Menggunakan Bootstrap Modal API
+  const modalElement = document.getElementById('purchaseModal');
+  const modal = new bootstrap.Modal(modalElement);
+  modal.show();
+};
+
+// 3. Menghitung Total Otomatis saat Qty / Price diketik
+window.calculateTotal = function() {
+  let qty = Number(document.getElementById('p_qty').value) || 0;
+  let price = Number(document.getElementById('p_price').value) || 0;
+  let total = qty * price;
+  
+  document.getElementById('p_total').value = total;
+};
+
+// 4. Menyimpan Data ke Database Spreadsheet
+window.savePurchase = async function() {
+  // Kumpulkan data dari form input
+  let data = {
+    date: document.getElementById('p_date').value,
+    item: document.getElementById('p_item').value,
+    part: document.getElementById('p_part').value,
+    merk: document.getElementById('p_merk').value,
+    unit: document.getElementById('p_unit').value,
+    vendor: document.getElementById('p_vendor').value,
+    satuan: document.getElementById('p_satuan').value,
+    qty: document.getElementById('p_qty').value,
+    price: document.getElementById('p_price').value,
+    inv: document.getElementById('p_inv').value,
+    pic: document.getElementById('p_pic').value,
+    job: document.getElementById('p_job').value
+  };
+
+  // Validasi sederhana
+  if (!data.date || !data.qty || !data.price) {
+    Swal.fire('Perhatian', 'Tanggal, Qty, dan Price wajib diisi!', 'warning');
+    return;
+  }
+
+  // Tampilkan loading screen dengan SweetAlert
+  Swal.fire({
+    title: 'Menyimpan...',
+    text: 'Mohon tunggu sebentar',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  // Kirim data ke API (Fungsi 'savePurchasing' di code.gs)
+  let response = await callAPI('savePurchasing', data);
+
+  if (response && response.status) {
+    Swal.fire('Berhasil', response.message, 'success');
+    
+    // Tutup Modal
+    const modalElement = document.getElementById('purchaseModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    if(modalInstance) modalInstance.hide();
+    
+    // Kosongkan form
+    document.querySelectorAll('.modal-body input').forEach(input => input.value = '');
+    
+    // Muat ulang tabel
+    initPurchasing();
+  } else {
+    Swal.fire('Error', 'Gagal menyimpan data.', 'error');
+  }
+};
+
+// 5. Fitur Pencarian Tabel
+window.filterPurchase = function() {
+  let input = document.getElementById('searchPurchase').value.toLowerCase();
+  let table = document.getElementById('purchaseTable');
+  let tr = table.getElementsByTagName('tr');
+
+  for (let i = 0; i < tr.length; i++) {
+    let tdText = tr[i].textContent || tr[i].innerText;
+    if (tdText.toLowerCase().indexOf(input) > -1) {
+      tr[i].style.display = "";
+    } else {
+      tr[i].style.display = "none";
+    }
+  }
+};
+
+// 6. Placeholder untuk dropdown item (Master Data)
+window.selectItem = function() {
+  // Nantinya di sini bisa diisi logika untuk otomatis memunculkan 
+  // Part Number atau Satuan saat item dipilih dari Dropdown
+  console.log("Item terpilih:", document.getElementById('p_item').value);
+};
+
+// ==========================================
 // LOGIKA MASING-MASING HALAMAN (Pindahkan ke sini)
 // ==========================================
 
