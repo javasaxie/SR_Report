@@ -35,34 +35,54 @@ window.callAPI = async function(action, data = null) {
   }
 };
 
-// 4. MASTER DATA (DROPDOWNS)
 window.loadMasterData = async function() {
-  // Panggil semua data master sekaligus
+  // 1. Ambil semua data master sekaligus
   const [items, vendors, merks] = await Promise.all([
     callAPI('getMasterItem'),
     callAPI('getVendor'),
     callAPI('getMerk')
   ]);
   
-  // Isi Dropdown Item
+  // 2. Setup Dropdown Item
   const itemSelect = document.getElementById('p_item');
   if (items && Array.isArray(items)) {
     itemSelect.innerHTML = '<option value="">-- Pilih Item --</option>';
-    items.forEach(d => itemSelect.innerHTML += `<option value="${d.item}">${d.item} (${d.part})</option>`);
+    
+    // Gunakan cara ini agar lebih aman & tidak memicu event yang tidak perlu saat render
+    items.forEach(d => {
+      let opt = document.createElement('option');
+      opt.value = d.item;
+      opt.textContent = `${d.item} (${d.part})`;
+      itemSelect.appendChild(opt);
+    });
+
+    // Pasang Event Listener secara programatik (Mencegah Infinite Loop)
+    itemSelect.removeEventListener('change', handleItemChange);
+    itemSelect.addEventListener('change', handleItemChange);
   }
 
-  // Isi Dropdown Vendor
+  // 3. Setup Dropdown Vendor
   const vendorSelect = document.getElementById('p_vendor');
   if (vendors && Array.isArray(vendors)) {
     vendorSelect.innerHTML = '<option value="">-- Pilih Vendor --</option>';
-    vendors.forEach(d => vendorSelect.innerHTML += `<option value="${d.nama}">${d.nama}</option>`);
+    vendors.forEach(d => {
+      let opt = document.createElement('option');
+      opt.value = d.nama;
+      opt.textContent = d.nama;
+      vendorSelect.appendChild(opt);
+    });
   }
 
-  // Isi Dropdown Merk
+  // 4. Setup Dropdown Merk
   const merkSelect = document.getElementById('p_merk');
   if (merks && Array.isArray(merks)) {
     merkSelect.innerHTML = '<option value="">-- Pilih Merk --</option>';
-    merks.forEach(d => merkSelect.innerHTML += `<option value="${d.merk}">${d.merk}</option>`);
+    merks.forEach(d => {
+      let opt = document.createElement('option');
+      opt.value = d.merk;
+      opt.textContent = d.merk;
+      merkSelect.appendChild(opt);
+    });
   }
 };
 
