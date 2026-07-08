@@ -1,5 +1,5 @@
 // GANTI DENGAN WEB APP URL DARI GOOGLE APPS SCRIPT ANDA
-const GAS_API_URL = "https://script.google.com/macros/s/AKfycbyT64VA9XjKLiLRfY8hEzq8po--RDIPlklg16hfW8AlDJ5gP1nN9tRaW4xv2nQFsDbO/exec"; 
+const GAS_API_URL = "https://script.google.com/macros/s/AKfycbycIoDtOA_CnbFJZwI5-sk9jShy3x-6vnwCV-OI1_PF-hZSl6MOxVyWj0RVGuXzUmjX/exec"; 
 
 // Fungsi Routing Halaman
 window.loadPage = async function(page) {
