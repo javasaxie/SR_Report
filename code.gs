@@ -56,6 +56,20 @@ function include(filename){
 
 }
 
+// ===============================
+// ROUTER HALAMAN (Tambahan)
+// ===============================
+
+function getPageContent(pageName) {
+  try {
+    // Mencari file html sesuai nama yang dikirim (misal: 'dashboard')
+    // evaluate() digunakan agar script <?!= include() ?> di dalam halaman juga ikut terender
+    return HtmlService.createTemplateFromFile(pageName).evaluate().getContent();
+  } catch (error) {
+    // Jika file HTML (misal 'dana.html') belum dibuat, tampilkan pesan error ini di halaman
+    return '<div class="alert alert-danger m-4"><h4>Error 404</h4><p>Halaman <b>' + pageName + '.html</b> belum dibuat di Apps Script.</p></div>';
+  }
+}
 
 
 // ===============================
