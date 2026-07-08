@@ -177,6 +177,37 @@ window.filterPurchase = function() {
   }
 };
 
+// Fungsi untuk memuat data master ke dalam dropdown
+window.loadMasterData = async function() {
+  let itemSelect = document.getElementById('p_item');
+  
+  // Ambil data item dari Google Sheets
+  let items = await callAPI('getMasterItem');
+  
+  if (items && Array.isArray(items)) {
+    // Reset dropdown ke pilihan default
+    itemSelect.innerHTML = '<option value="">-- Pilih Item --</option>';
+    
+    // Tambahkan opsi baru
+    items.forEach(data => {
+      let option = document.createElement('option');
+      option.value = data.item; // Sesuaikan dengan field di database Anda
+      option.textContent = data.item + ' (' + data.part + ')'; // Tampilan di dropdown
+      itemSelect.appendChild(option);
+    });
+  }
+};
+
+// Modifikasi fungsi openPurchaseModal agar otomatis memuat data saat dibuka
+window.openPurchaseModal = function() {
+  const modalElement = document.getElementById('purchaseModal');
+  const modal = new bootstrap.Modal(modalElement);
+  modal.show();
+  
+  // Panggil fungsi untuk mengisi dropdown saat modal dibuka
+  loadMasterData();
+};
+
 // 6. Placeholder untuk dropdown item (Master Data)
 window.selectItem = function() {
   // Nantinya di sini bisa diisi logika untuk otomatis memunculkan 
