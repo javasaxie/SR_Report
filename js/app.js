@@ -21,7 +21,7 @@ window.loadPage = function(page) {
       console.error("Error:", err);
       document.getElementById("page").innerHTML = "<p style='color:red;'>Error: " + err + "</p>";
     })
-    .include(page + '.html');
+    .include(page);
 };
 
 document.addEventListener('DOMContentLoaded', function() {
